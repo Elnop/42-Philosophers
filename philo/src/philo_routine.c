@@ -6,7 +6,7 @@
 /*   By: lperroti <lperroti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 20:53:12 by lperroti          #+#    #+#             */
-/*   Updated: 2023/05/24 03:42:17 by lperroti         ###   ########.fr       */
+/*   Updated: 2023/06/16 15:37:15 by lperroti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ void	take_forks_and_eat(t_philo *philo)
 	pthread_mutex_t	*fork_right;
 
 	fork_left = &philo->fork_mutex;
-	change_status(philo, TAKING_A_FORK);
 	if (philo->my_index + 1 < philo->app->philo_count)
 		fork_right = &philo->app->philo_list[philo->my_index + 1].fork_mutex;
 	else
@@ -40,19 +39,35 @@ void	take_forks_and_eat(t_philo *philo)
 
 }
 
+bool	am_i_starving(t_philo *philo)
+{
+	if (lp_get_timestamp() - philo->last_meal > philo->app->time_to_die)
+	{
+		change_status(philo, DIED);
+		pthread_mutex_lock(&(philo->app->is_finish_mutex));
+		philo->app->is_finish = true;
+		pthread_mutex_unlock(&(philo->app->is_finish_mutex));
+		return (true);
+	}
+	return (false);
+}
+
 void	*philo_routine(void *props)
 {
 	t_philo	*philo;
 
 	philo = (t_philo *)props;
+	if (philo->my_index % 2)
+		lp_wait(philo->app->time_to_eat);
 	while (true)
 	{
-		if (is_finish(philo->app))
+		if (is_finish(philo->app) || am_i_starving(philo))
 			return (NULL);
 		take_forks_and_eat(philo);
 		change_status(philo, SLEEPING);
 		lp_wait(philo->app->time_to_sleep);
 		change_status(philo, THINKING);
+		lp_wait(philo->app->time_to_eat - philo->app->time_to_sleep);
 	}
 	return (NULL);
 }

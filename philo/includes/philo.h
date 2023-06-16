@@ -6,7 +6,7 @@
 /*   By: lperroti <lperroti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 03:37:44 by lperroti          #+#    #+#             */
-/*   Updated: 2023/05/24 03:38:36 by lperroti         ###   ########.fr       */
+/*   Updated: 2023/06/16 13:19:26 by lperroti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,19 +24,10 @@ enum e_philo_status {
 	DIED
 };
 
-typedef struct s_philo {
-	int					my_index;
-	pthread_t			thread;
-	pthread_mutex_t		fork_mutex;
-	enum e_philo_status	status;
-	long long			last_meal;
-	struct s_app		*app;
-}	t_philo;
-
 typedef struct s_app {
 	long long		start_timestamp;
 	long			philo_count;
-	t_philo			*philo_list;
+	struct s_philo	*philo_list;
 	long			time_to_die;
 	long			time_to_eat;
 	long			time_to_sleep;
@@ -45,6 +36,15 @@ typedef struct s_app {
 	bool			is_finish;
 	pthread_mutex_t	write_mutex;
 }	t_app;
+
+typedef struct s_philo {
+	int					my_index;
+	pthread_t			thread;
+	pthread_mutex_t		fork_mutex;
+	enum e_philo_status	status;
+	long long			last_meal;
+	t_app		*app;
+}	t_philo;
 
 bool	check_args(int argc, char const *argv[]);
 bool	init_app(t_app *app, int argc, char const *argv[]);
