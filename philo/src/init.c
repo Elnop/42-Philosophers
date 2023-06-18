@@ -6,7 +6,7 @@
 /*   By: lperroti <lperroti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 19:10:34 by lperroti          #+#    #+#             */
-/*   Updated: 2023/06/16 13:28:36 by lperroti         ###   ########.fr       */
+/*   Updated: 2023/06/18 22:45:13 by lperroti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,5 +46,6 @@ bool	init_app(t_app *app, int argc, char const *argv[])
 	pthread_mutex_init(&(app->write_mutex), NULL);
 	if (!init_philos_and_forks(app))
 		return (false);
+	app->start_timestamp = lp_get_timestamp();
 	return (true);
 }

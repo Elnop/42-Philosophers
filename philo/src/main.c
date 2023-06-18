@@ -6,7 +6,7 @@
 /*   By: lperroti <lperroti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 03:37:01 by lperroti          #+#    #+#             */
-/*   Updated: 2023/06/16 14:33:17 by lperroti         ###   ########.fr       */
+/*   Updated: 2023/06/18 20:28:16 by lperroti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,23 +26,23 @@ static void	start_philos(t_app *app)
 	}
 }
 
-static void	is_finish_while(t_app *app)
-{
-	int	i;
+// static void	is_finish_while(t_app *app)
+// {
+// 	int	i;
 
-	i = 0;
-	while (i < app->philo_count)
-	{
-		if (lp_get_timestamp() - app->philo_list[i].last_meal
-			> app->time_to_die)
-		{
-			pthread_mutex_lock(&app->is_finish_mutex);
-			app->is_finish = true;
-			pthread_mutex_unlock(&app->is_finish_mutex);
-		}
-		i++;
-	}
-}
+// 	i = 0;
+// 	while (i < app->philo_count)
+// 	{
+// 		if (lp_get_timestamp() - app->philo_list[i].last_meal
+// 			> app->time_to_die)
+// 		{
+// 			pthread_mutex_lock(&app->is_finish_mutex);
+// 			app->is_finish = true;
+// 			pthread_mutex_unlock(&app->is_finish_mutex);
+// 		}
+// 		i++;
+// 	}
+// }
 
 static void	destroy_forks_mutex(t_app *app)
 {
@@ -87,7 +87,7 @@ int	main(int argc, char const *argv[])
 		return (0);
 	}
 	start_philos(&app);
-	is_finish_while(&app);
+	//is_finish_while(&app);
 	wait_philos(&app);
 	destroy_all(&app);
 	return (0);

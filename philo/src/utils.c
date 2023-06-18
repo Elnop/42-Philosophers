@@ -6,7 +6,7 @@
 /*   By: lperroti <lperroti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 23:58:41 by lperroti          #+#    #+#             */
-/*   Updated: 2023/06/16 14:39:23 by lperroti         ###   ########.fr       */
+/*   Updated: 2023/06/18 22:46:47 by lperroti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,29 @@
 
 static void	print_status(t_philo *philo)
 {
-	if (is_finish(philo->app))
-		return ;
 	pthread_mutex_lock(&philo->app->write_mutex);
+	if (is_finish(philo->app))
+		return ((void)pthread_mutex_unlock(&philo->app->write_mutex));
 	if (philo->status == TAKING_A_FORK)
 		printf("%lld %d has taken a fork\n",
-			lp_get_timestamp(), philo->my_index + 1);
+			lp_get_timestamp() - philo->app->start_timestamp,
+			philo->my_index + 1);
 	if (philo->status == EATING)
 		printf("%lld %d is eating\n",
-			lp_get_timestamp(), philo->my_index + 1);
+			lp_get_timestamp() - philo->app->start_timestamp,
+			philo->my_index + 1);
 	if (philo->status == SLEEPING)
 		printf("%lld %d is sleeping\n",
-			lp_get_timestamp(), philo->my_index + 1);
+			lp_get_timestamp() - philo->app->start_timestamp,
+			philo->my_index + 1);
 	if (philo->status == THINKING)
 		printf("%lld %d is thinking\n",
-			lp_get_timestamp(), philo->my_index + 1);
+			lp_get_timestamp() - philo->app->start_timestamp,
+			philo->my_index + 1);
 	if (philo->status == DIED)
 		printf("%lld %d died\n",
-			lp_get_timestamp(), philo->my_index + 1);
+			lp_get_timestamp() - philo->app->start_timestamp,
+			philo->my_index + 1);
 	pthread_mutex_unlock(&philo->app->write_mutex);
 }
 

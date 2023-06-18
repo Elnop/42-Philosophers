@@ -1,6 +1,6 @@
 NAME = philo
 
-CC = cc
+CC = clang
 
 CFLAGS = -Wall -Wextra -Werror -g3
 
