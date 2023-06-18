@@ -6,7 +6,7 @@
 /*   By: lperroti <lperroti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 03:37:44 by lperroti          #+#    #+#             */
-/*   Updated: 2023/06/16 13:19:26 by lperroti         ###   ########.fr       */
+/*   Updated: 2023/06/18 23:29:10 by lperroti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,8 @@ typedef struct s_philo {
 	pthread_mutex_t		fork_mutex;
 	enum e_philo_status	status;
 	long long			last_meal;
-	t_app		*app;
+	int					meal_count;
+	t_app				*app;
 }	t_philo;
 
 bool	check_args(int argc, char const *argv[]);

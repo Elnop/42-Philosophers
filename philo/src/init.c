@@ -6,7 +6,7 @@
 /*   By: lperroti <lperroti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 19:10:34 by lperroti          #+#    #+#             */
-/*   Updated: 2023/06/18 22:45:13 by lperroti         ###   ########.fr       */
+/*   Updated: 2023/06/18 23:29:18 by lperroti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,10 @@ bool	init_philos_and_forks(t_app *app)
 	while (i < app->philo_count)
 	{
 		app->philo_list[i].my_index = i;
-		app->philo_list[i].last_meal = lp_get_timestamp();
 		app->philo_list[i].app = app;
+		app->philo_list[i].meal_count = 0;
 		pthread_mutex_init(&(app->philo_list[i].fork_mutex), NULL);
+		app->philo_list[i].last_meal = lp_get_timestamp();
 		i++;
 	}
 	return (true);
