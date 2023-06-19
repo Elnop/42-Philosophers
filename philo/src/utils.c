@@ -6,11 +6,23 @@
 /*   By: lperroti <lperroti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 23:58:41 by lperroti          #+#    #+#             */
-/*   Updated: 2023/06/18 22:46:47 by lperroti         ###   ########.fr       */
+/*   Updated: 2023/06/19 03:29:31 by lperroti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
+
+void	philo_wait(t_philo	*philo, long long ms)
+{
+	long long const	target = lp_get_timestamp() + ms;
+
+	while (lp_get_timestamp() < target)
+	{
+		if (is_finish(philo->app))
+			return ;
+		usleep(120);
+	}
+}
 
 static void	print_status(t_philo *philo)
 {
@@ -42,8 +54,6 @@ static void	print_status(t_philo *philo)
 
 void	change_status(t_philo *philo, enum e_philo_status status)
 {
-	if (is_finish(philo->app))
-		return ;
 	if (status == EATING)
 		philo->last_meal = lp_get_timestamp();
 	philo->status = status;

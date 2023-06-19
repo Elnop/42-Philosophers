@@ -6,7 +6,7 @@
 /*   By: lperroti <lperroti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 03:37:44 by lperroti          #+#    #+#             */
-/*   Updated: 2023/06/18 23:29:10 by lperroti         ###   ########.fr       */
+/*   Updated: 2023/06/19 03:09:39 by lperroti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ typedef struct s_app {
 	long			time_to_eat;
 	long			time_to_sleep;
 	long			max_meal;
+	pthread_mutex_t	total_satiated_mutex;
+	long long		total_satiated;
 	pthread_mutex_t	is_finish_mutex;
 	bool			is_finish;
 	pthread_mutex_t	write_mutex;
@@ -41,9 +43,9 @@ typedef struct s_philo {
 	int					my_index;
 	pthread_t			thread;
 	pthread_mutex_t		fork_mutex;
-	enum e_philo_status	status;
 	long long			last_meal;
-	int					meal_count;
+	long long			meal_count;
+	enum e_philo_status	status;
 	t_app				*app;
 }	t_philo;
 
@@ -52,5 +54,6 @@ bool	init_app(t_app *app, int argc, char const *argv[]);
 void	*philo_routine(void *app);
 void	change_status(t_philo *philo, enum e_philo_status status);
 bool	is_finish(t_app	*app);
+void	philo_wait(t_philo	*philo, long long ms);
 
 #endif

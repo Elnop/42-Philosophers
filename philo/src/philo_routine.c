@@ -6,7 +6,7 @@
 /*   By: lperroti <lperroti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 20:53:12 by lperroti          #+#    #+#             */
-/*   Updated: 2023/06/18 23:36:12 by lperroti         ###   ########.fr       */
+/*   Updated: 2023/06/19 03:10:25 by lperroti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	take_forks_and_eat(t_philo *philo)
 	change_status(philo, TAKING_A_FORK);
 	change_status(philo, EATING);
 	philo->meal_count += 1;
-	lp_wait(philo->app->time_to_eat);
+	philo_wait(philo, philo->app->time_to_eat);
 	pthread_mutex_unlock(fork_left);
 	pthread_mutex_unlock(fork_right);
 }
@@ -57,8 +57,15 @@ bool	am_i_starving(t_philo *philo)
 
 bool	check_eat_enough(t_philo *philo)
 {
-	if (philo->meal_count >= philo->app->max_meal)
+	pthread_mutex_lock(&philo->app->total_satiated_mutex);
+	if (philo->meal_count == philo->app->max_meal)
+			philo->app->total_satiated += 1;
+	if (philo->app->total_satiated == philo->app->philo_count)
+	{
+		pthread_mutex_unlock(&philo->app->total_satiated_mutex);
 		return (true);
+	}
+	pthread_mutex_unlock(&philo->app->total_satiated_mutex);
 	return (false);
 }
 
@@ -68,7 +75,7 @@ void	*philo_routine(void *props)
 
 	philo = (t_philo *)props;
 	if (philo->my_index % 2)
-		lp_wait(philo->app->time_to_eat);
+		philo_wait(philo, philo->app->time_to_eat);
 	while (true)
 	{
 		if (is_finish(philo->app) || am_i_starving(philo))
@@ -77,9 +84,11 @@ void	*philo_routine(void *props)
 		if (check_eat_enough(philo))
 			return (NULL);
 		change_status(philo, SLEEPING);
-		lp_wait(philo->app->time_to_sleep);
+		philo_wait(philo, philo->app->time_to_sleep);
 		change_status(philo, THINKING);
-		lp_wait(philo->app->time_to_eat - philo->app->time_to_sleep);
+		if (philo->app->time_to_eat >= philo->app->time_to_sleep)
+			philo_wait(philo,
+				philo->app->time_to_eat - philo->app->time_to_sleep);
 	}
 	return (NULL);
 }
