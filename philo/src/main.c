@@ -43,7 +43,7 @@ static void	destroy_all(t_app *app)
 	pthread_mutex_destroy(&app->write_mutex);
 }
 
-static void	wait_philos(t_app *app)
+static void	join_philos(t_app *app)
 {
 	int	i;
 
@@ -69,7 +69,7 @@ int	main(int argc, char const *argv[])
 		return (0);
 	}
 	start_philos(&app);
-	wait_philos(&app);
+	join_philos(&app);
 	destroy_all(&app);
 	return (0);
 }

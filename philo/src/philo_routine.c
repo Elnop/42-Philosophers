@@ -55,7 +55,7 @@ bool	am_i_starving(t_philo *philo)
 	return (false);
 }
 
-bool	check_eat_enough(t_philo *philo)
+bool	check_all_philo_eat_enough(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->app->total_satiated_mutex);
 	if (philo->meal_count == philo->app->max_meal)
@@ -69,26 +69,33 @@ bool	check_eat_enough(t_philo *philo)
 	return (false);
 }
 
+void	smart_start_routine(t_philo *philo)
+{
+	if (philo->my_index % 2)
+		philo_wait(philo, philo->app->time_to_eat);
+}
+
 void	*philo_routine(void *props)
 {
 	t_philo	*philo;
 
 	philo = (t_philo *)props;
-	if (philo->my_index % 2)
-		philo_wait(philo, philo->app->time_to_eat);
+	smart_start_routine(philo);
 	while (true)
 	{
 		if (is_finish(philo->app) || am_i_starving(philo))
 			return (NULL);
 		take_forks_and_eat(philo);
-		if (check_eat_enough(philo))
+		if (check_all_philo_eat_enough(philo))
 			return (NULL);
 		change_status(philo, SLEEPING);
 		philo_wait(philo, philo->app->time_to_sleep);
 		change_status(philo, THINKING);
-		if (philo->app->time_to_eat >= philo->app->time_to_sleep)
-			philo_wait(philo,
-				philo->app->time_to_eat - philo->app->time_to_sleep);
 	}
 	return (NULL);
 }
+
+// ====== Smart Think ======
+// if (philo->app->time_to_eat >= philo->app->time_to_sleep)
+// 	philo_wait(philo,
+// 		philo->app->time_to_eat - philo->app->time_to_sleep);

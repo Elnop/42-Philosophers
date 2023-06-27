@@ -12,6 +12,16 @@
 
 #include "../includes/philo.h"
 
+bool	is_finish(t_app	*app)
+{
+	bool	out;
+
+	pthread_mutex_lock(&(app->is_finish_mutex));
+	out = app->is_finish;
+	pthread_mutex_unlock(&(app->is_finish_mutex));
+	return (out);
+}
+
 void	philo_wait(t_philo	*philo, long long ms)
 {
 	long long const	target = lp_get_timestamp() + ms;
@@ -58,14 +68,4 @@ void	change_status(t_philo *philo, enum e_philo_status status)
 		philo->last_meal = lp_get_timestamp();
 	philo->status = status;
 	print_status(philo);
-}
-
-bool	is_finish(t_app	*app)
-{
-	bool	out;
-
-	pthread_mutex_lock(&(app->is_finish_mutex));
-	out = app->is_finish;
-	pthread_mutex_unlock(&(app->is_finish_mutex));
-	return (out);
 }
