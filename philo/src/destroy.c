@@ -1,39 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing.c                                          :+:      :+:    :+:   */
+/*   destroy.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lperroti <lperroti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/20 19:12:41 by lperroti          #+#    #+#             */
-/*   Updated: 2023/06/28 01:42:43 by lperroti         ###   ########.fr       */
+/*   Created: 2023/06/28 04:36:39 by lperroti          #+#    #+#             */
+/*   Updated: 2023/06/28 04:37:25 by lperroti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
 
-char	check_args_handler(unsigned int i, char c)
+void	destroy_forks_mutex(t_app *app)
 {
-	(void)i;
-	if ((c >= '0' && c <= '9'))
-		return (c);
-	return ('x');
+	int	i;
+
+	i = 0;
+	while (i < app->philo_count)
+		pthread_mutex_destroy(&app->philo_list[i++].fork_mutex);
 }
 
-bool	check_args(int argc, char const *argv[])
+void	destroy_all(t_app *app)
 {
-	char	*tmp;
-	int		i;
-
-	if (argc != 5 && argc != 6)
-		return (false);
-	i = 1;
-	while (i < argc)
-	{
-		tmp = lp_strmapi(argv[i++], check_args_handler);
-		if (lp_strchr(tmp, 'x'))
-			return (free(tmp), false);
-		free(tmp);
-	}
-	return (true);
+	destroy_forks_mutex(app);
+	free(app->philo_list);
+	pthread_mutex_destroy(&app->is_finish_mutex);
+	pthread_mutex_destroy(&app->write_mutex);
 }

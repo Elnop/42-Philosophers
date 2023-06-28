@@ -6,7 +6,7 @@
 /*   By: lperroti <lperroti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 23:58:41 by lperroti          #+#    #+#             */
-/*   Updated: 2023/06/19 03:29:31 by lperroti         ###   ########.fr       */
+/*   Updated: 2023/06/28 03:17:27 by lperroti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,18 +20,6 @@ bool	is_finish(t_app	*app)
 	out = app->is_finish;
 	pthread_mutex_unlock(&(app->is_finish_mutex));
 	return (out);
-}
-
-void	philo_wait(t_philo	*philo, long long ms)
-{
-	long long const	target = lp_get_timestamp() + ms;
-
-	while (lp_get_timestamp() < target)
-	{
-		if (is_finish(philo->app))
-			return ;
-		usleep(120);
-	}
 }
 
 static void	print_status(t_philo *philo)
@@ -68,4 +56,19 @@ void	change_status(t_philo *philo, enum e_philo_status status)
 		philo->last_meal = lp_get_timestamp();
 	philo->status = status;
 	print_status(philo);
+}
+
+bool	check_all_philo_eat_enough(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->app->total_satiated_mutex);
+	if (philo->app->total_satiated == philo->app->philo_count)
+	{
+		pthread_mutex_lock(&(philo->app->is_finish_mutex));
+		philo->app->is_finish = true;
+		pthread_mutex_unlock(&(philo->app->is_finish_mutex));
+		pthread_mutex_unlock(&philo->app->total_satiated_mutex);
+		return (true);
+	}
+	pthread_mutex_unlock(&philo->app->total_satiated_mutex);
+	return (false);
 }
