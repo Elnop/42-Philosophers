@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lperroti <lperroti@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 03:37:01 by lperroti          #+#    #+#             */
-/*   Updated: 2023/06/28 04:39:15 by lperroti         ###   ########.fr       */
+/*   Updated: 2023/06/29 00:03:21 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,6 @@ static void	join_philos(t_app *app)
 		pthread_join(app->philo_list[i++].thread, NULL);
 }
 
-static void	wait_finish()
-{
-	// todo
-}
-
 int	main(int argc, char const *argv[])
 {
 	t_app	app;
@@ -69,6 +64,7 @@ int	main(int argc, char const *argv[])
 		printf("WOOOOH TOO MUCH THREADS !!!!!!\n");
 		return (0);
 	}
+	while_check_philos(&app);
 	join_philos(&app);
 	destroy_all(&app);
 	return (0);

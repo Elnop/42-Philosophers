@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_routine.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lperroti <lperroti@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 20:53:12 by lperroti          #+#    #+#             */
-/*   Updated: 2023/06/28 04:35:04 by lperroti         ###   ########.fr       */
+/*   Updated: 2023/07/01 20:05:21 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,17 +20,15 @@ void	philo_wait(t_philo	*philo, long long ms)
 	{
 		if (is_finish(philo->app))
 			return ;
-		usleep(5);
+		usleep(PHILO_WAIT_USLEEP);
 	}
 }
 
-void	inc_and_check_meal_count(t_philo *philo)
+void	inc_meal_count(t_philo *philo)
 {
+	pthread_mutex_lock(&philo->meal_count_mutex);
 	philo->meal_count += 1;
-	pthread_mutex_lock(&philo->app->total_satiated_mutex);
-	if (philo->meal_count == philo->app->max_meal)
-			philo->app->total_satiated += 1;
-	pthread_mutex_unlock(&philo->app->total_satiated_mutex);
+	pthread_mutex_unlock(&philo->meal_count_mutex);
 }
 
 static void	take_forks(t_philo *philo,
@@ -63,13 +61,13 @@ static void	take_forks_and_eat(t_philo *philo)
 	philo_wait(philo, philo->app->time_to_eat);
 	pthread_mutex_unlock(fork_left);
 	pthread_mutex_unlock(fork_right);
-	inc_and_check_meal_count(philo);
+	inc_meal_count(philo);
 }
 
 static void	smart_start(t_philo *philo)
 {
 	if (philo->my_index % 2)
-		philo_wait(philo, philo->app->time_to_eat);
+		philo_wait(philo, philo->app->time_to_eat + (int)(philo->app->time_to_eat / 3));
 }
 
 void	*philo_routine(void *props)
@@ -84,6 +82,8 @@ void	*philo_routine(void *props)
 	smart_start(philo);
 	while (!is_finish(philo->app))
 	{
+		if (is_finish(philo->app))
+			return (NULL);
 		take_forks_and_eat(philo);
 		if (is_finish(philo->app))
 			return (NULL);
@@ -92,6 +92,9 @@ void	*philo_routine(void *props)
 		if (is_finish(philo->app))
 			return (NULL);
 		change_status(philo, THINKING);
+		if (philo->app->time_to_eat > philo->app->time_to_sleep)
+			philo_wait(philo, philo->app->time_to_eat - philo->app->time_to_sleep);
+
 	}
 	return (NULL);
 }

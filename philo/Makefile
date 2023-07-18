@@ -9,7 +9,9 @@ FILES = main \
 		init \
 		philo_routine \
 		utils \
-		mini_liblp
+		mini_liblp \
+		destroy \
+		while_check_philos
 
 SRCS_DIR = src
 

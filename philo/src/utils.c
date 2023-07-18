@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lperroti <lperroti@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 23:58:41 by lperroti          #+#    #+#             */
-/*   Updated: 2023/06/28 03:17:27 by lperroti         ###   ########.fr       */
+/*   Updated: 2023/06/29 00:04:15 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,19 +56,4 @@ void	change_status(t_philo *philo, enum e_philo_status status)
 		philo->last_meal = lp_get_timestamp();
 	philo->status = status;
 	print_status(philo);
-}
-
-bool	check_all_philo_eat_enough(t_philo *philo)
-{
-	pthread_mutex_lock(&philo->app->total_satiated_mutex);
-	if (philo->app->total_satiated == philo->app->philo_count)
-	{
-		pthread_mutex_lock(&(philo->app->is_finish_mutex));
-		philo->app->is_finish = true;
-		pthread_mutex_unlock(&(philo->app->is_finish_mutex));
-		pthread_mutex_unlock(&philo->app->total_satiated_mutex);
-		return (true);
-	}
-	pthread_mutex_unlock(&philo->app->total_satiated_mutex);
-	return (false);
 }

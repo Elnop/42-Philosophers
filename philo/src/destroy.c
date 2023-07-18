@@ -25,6 +25,7 @@ void	destroy_all(t_app *app)
 {
 	destroy_forks_mutex(app);
 	free(app->philo_list);
+	pthread_mutex_destroy(&app->start_mutex);
 	pthread_mutex_destroy(&app->is_finish_mutex);
 	pthread_mutex_destroy(&app->write_mutex);
 }
