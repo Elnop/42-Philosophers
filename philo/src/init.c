@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lperroti <lperroti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 19:10:34 by lperroti          #+#    #+#             */
-/*   Updated: 2023/06/29 00:24:49 by marvin           ###   ########.fr       */
+/*   Updated: 2023/06/19 02:35:20 by lperroti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,32 +26,10 @@ bool	init_philos_and_forks(t_app *app)
 		app->philo_list[i].app = app;
 		app->philo_list[i].meal_count = 0;
 		pthread_mutex_init(&(app->philo_list[i].fork_mutex), NULL);
-		pthread_mutex_init(&(app->philo_list[i].meal_count_mutex), NULL);
+		app->philo_list[i].last_meal = lp_get_timestamp();
 		i++;
 	}
 	return (true);
-}
-
-long long	lp_atol(const char *nptr)
-{
-	long long	num;
-	long long	sign;
-
-	num = 0;
-	while ((*nptr >= '\t' && *nptr <= '\r') || *nptr == ' ')
-		nptr++;
-	sign = 1;
-	if (*nptr == '-')
-		sign = -1;
-	if (*nptr == '-' || *nptr == '+')
-		nptr++;
-	while (*nptr >= '0' && *nptr <= '9')
-	{
-		num *= 10;
-		num += *nptr - '0';
-		nptr++;
-	}
-	return (num * sign);
 }
 
 bool	init_app(t_app *app, int argc, char const *argv[])
@@ -67,7 +45,10 @@ bool	init_app(t_app *app, int argc, char const *argv[])
 	pthread_mutex_init(&(app->is_finish_mutex), NULL);
 	app->is_finish = false;
 	pthread_mutex_init(&(app->write_mutex), NULL);
+	pthread_mutex_init(&app->total_satiated_mutex, NULL);
+	app->total_satiated = 0;
 	if (!init_philos_and_forks(app))
 		return (false);
+	app->start_timestamp = lp_get_timestamp();
 	return (true);
 }

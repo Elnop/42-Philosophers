@@ -3,23 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lperroti <lperroti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 23:58:41 by lperroti          #+#    #+#             */
-/*   Updated: 2023/06/29 00:04:15 by marvin           ###   ########.fr       */
+/*   Updated: 2023/07/19 23:52:12 by lperroti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
 
-bool	is_finish(t_app	*app)
+void	philo_wait(t_philo	*philo, long long ms)
 {
-	bool	out;
+	long long const	target = lp_get_timestamp() + ms;
 
-	pthread_mutex_lock(&(app->is_finish_mutex));
-	out = app->is_finish;
-	pthread_mutex_unlock(&(app->is_finish_mutex));
-	return (out);
+	while (lp_get_timestamp() < target)
+	{
+		if (is_finish(philo->app))
+			return ;
+		usleep(PHILO_WAIT_USLEEP);
+	}
 }
 
 static void	print_status(t_philo *philo)
@@ -56,4 +58,14 @@ void	change_status(t_philo *philo, enum e_philo_status status)
 		philo->last_meal = lp_get_timestamp();
 	philo->status = status;
 	print_status(philo);
+}
+
+bool	is_finish(t_app	*app)
+{
+	bool	out;
+
+	pthread_mutex_lock(&(app->is_finish_mutex));
+	out = app->is_finish;
+	pthread_mutex_unlock(&(app->is_finish_mutex));
+	return (out);
 }

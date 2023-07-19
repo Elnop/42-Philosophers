@@ -1,39 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing.c                                          :+:      :+:    :+:   */
+/*   lp_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lperroti <lperroti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/20 19:12:41 by lperroti          #+#    #+#             */
-/*   Updated: 2023/06/18 21:13:08 by lperroti         ###   ########.fr       */
+/*   Created: 2022/11/09 09:24:18 by lperroti          #+#    #+#             */
+/*   Updated: 2023/01/11 11:47:42 by lperroti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/philo.h"
+#include "../liblp_str.h"
 
-char	check_args_handler(unsigned int i, char c)
+char	*lp_strjoin(char const *s1, char const *s2)
 {
-	(void)i;
-	if (lp_isdigit(c))
-		return (c);
-	return ('x');
-}
-
-bool	check_args(int argc, char const *argv[])
-{
-	char	*tmp;
+	char	*str;
 	int		i;
 
-	if (argc != 5 && argc != 6)
-		return (false);
-	i = 1;
-	while (i < argc)
+	str = malloc((lp_strlen(s1) + lp_strlen(s2) + 1) * sizeof(char));
+	if (!str)
+		return (NULL);
+	i = 0;
+	while (*s1)
 	{
-		tmp = lp_strmapi(argv[i++], check_args_handler);
-		if (lp_strchr(tmp, 'x'))
-			return (free(tmp), false);
-		free(tmp);
+		str[i++] = *s1;
+		s1++;
 	}
-	return (true);
+	while (*s2)
+	{
+		str[i++] = *s2;
+		s2++;
+	}
+	str[i] = 0;
+	return (str);
 }

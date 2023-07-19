@@ -1,39 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing.c                                          :+:      :+:    :+:   */
+/*   lp_putchar_fdpc.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lperroti <lperroti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/20 19:12:41 by lperroti          #+#    #+#             */
-/*   Updated: 2023/06/18 21:13:08 by lperroti         ###   ########.fr       */
+/*   Created: 2023/01/07 02:35:30 by lperroti          #+#    #+#             */
+/*   Updated: 2023/01/07 03:10:13 by lperroti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/philo.h"
+#include "../liblp_print.h"
 
-char	check_args_handler(unsigned int i, char c)
+bool	lp_putchar_fdpc(char c, int fd, size_t *pcount)
 {
-	(void)i;
-	if (lp_isdigit(c))
-		return (c);
-	return ('x');
-}
-
-bool	check_args(int argc, char const *argv[])
-{
-	char	*tmp;
-	int		i;
-
-	if (argc != 5 && argc != 6)
+	if (write(fd, &c, 1) == -1)
 		return (false);
-	i = 1;
-	while (i < argc)
-	{
-		tmp = lp_strmapi(argv[i++], check_args_handler);
-		if (lp_strchr(tmp, 'x'))
-			return (free(tmp), false);
-		free(tmp);
-	}
+	*pcount += 1;
 	return (true);
 }

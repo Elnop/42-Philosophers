@@ -1,39 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing.c                                          :+:      :+:    :+:   */
+/*   lp_putnbr_fdpc.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lperroti <lperroti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/20 19:12:41 by lperroti          #+#    #+#             */
-/*   Updated: 2023/06/18 21:13:08 by lperroti         ###   ########.fr       */
+/*   Created: 2023/01/07 03:30:52 by lperroti          #+#    #+#             */
+/*   Updated: 2023/01/07 03:53:53 by lperroti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/philo.h"
+#include "../liblp_print.h"
 
-char	check_args_handler(unsigned int i, char c)
+bool	lp_putnbr_fdpc(int n, int fd, size_t *pcount)
 {
-	(void)i;
-	if (lp_isdigit(c))
-		return (c);
-	return ('x');
-}
-
-bool	check_args(int argc, char const *argv[])
-{
-	char	*tmp;
-	int		i;
-
-	if (argc != 5 && argc != 6)
-		return (false);
-	i = 1;
-	while (i < argc)
+	if (n == -2147483648)
 	{
-		tmp = lp_strmapi(argv[i++], check_args_handler);
-		if (lp_strchr(tmp, 'x'))
-			return (free(tmp), false);
-		free(tmp);
+		if (!lp_putstr_fdpc("-2147483648", fd, pcount))
+			return (false);
+		return (true);
 	}
+	if (n < 0)
+	{
+		n *= -1;
+		if (!lp_putchar_fdpc('-', fd, pcount))
+			return (false);
+	}
+	if (n > 9)
+		if (!lp_putnbr_fdpc(n / 10, fd, pcount))
+			return (false);
+	if (!lp_putchar_fdpc(n % 10 + '0', fd, pcount))
+		return (false);
 	return (true);
 }

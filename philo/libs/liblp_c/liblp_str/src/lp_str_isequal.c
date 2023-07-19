@@ -1,39 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing.c                                          :+:      :+:    :+:   */
+/*   lp_str_isequal.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lperroti <lperroti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/20 19:12:41 by lperroti          #+#    #+#             */
-/*   Updated: 2023/06/18 21:13:08 by lperroti         ###   ########.fr       */
+/*   Created: 2023/01/08 03:09:01 by lperroti          #+#    #+#             */
+/*   Updated: 2023/01/08 03:17:08 by lperroti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/philo.h"
+#include "../liblp_str.h"
 
-char	check_args_handler(unsigned int i, char c)
+bool	lp_str_isequal(const char *s1, const char *s2)
 {
-	(void)i;
-	if (lp_isdigit(c))
-		return (c);
-	return ('x');
-}
+	size_t			i;
+	unsigned char	*str1;
+	unsigned char	*str2;
 
-bool	check_args(int argc, char const *argv[])
-{
-	char	*tmp;
-	int		i;
-
-	if (argc != 5 && argc != 6)
+	str1 = (unsigned char *)s1;
+	str2 = (unsigned char *)s2;
+	i = 0;
+	while (str1[i] && str2[i] && !(s1[i] - str2[i]))
+		i++;
+	if (str1[i] || str2[i])
 		return (false);
-	i = 1;
-	while (i < argc)
-	{
-		tmp = lp_strmapi(argv[i++], check_args_handler);
-		if (lp_strchr(tmp, 'x'))
-			return (free(tmp), false);
-		free(tmp);
-	}
 	return (true);
 }
