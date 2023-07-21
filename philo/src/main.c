@@ -6,7 +6,7 @@
 /*   By: lperroti <lperroti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 03:37:01 by lperroti          #+#    #+#             */
-/*   Updated: 2023/07/20 00:56:25 by lperroti         ###   ########.fr       */
+/*   Updated: 2023/07/21 03:02:12 by lperroti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,9 @@ int	main(int argc, char const *argv[])
 
 	if (!check_args(argc, argv))
 	{
-		lp_printf("Philosophers\n./philo number_of_philosophers ");
-		lp_printf("time_to_die time_to_eat time_to_sleep ");
-		lp_printf("[number_of_times_each_philosopher_must_eat]\n");
+		printf("Philosophers\n./philo number_of_philosophers ");
+		printf("time_to_die time_to_eat time_to_sleep ");
+		printf("[number_of_times_each_philosopher_must_eat]\n");
 		return (0);
 	}
 	if (!init_app(&app, argc, argv) || !app.philo_count || app.philo_count < 2)

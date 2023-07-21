@@ -6,7 +6,7 @@
 /*   By: lperroti <lperroti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 19:12:41 by lperroti          #+#    #+#             */
-/*   Updated: 2023/06/18 21:13:08 by lperroti         ###   ########.fr       */
+/*   Updated: 2023/07/21 03:07:57 by lperroti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 char	check_args_handler(unsigned int i, char c)
 {
 	(void)i;
-	if (lp_isdigit(c))
+	if (c >= '0' && c <= '9')
 		return (c);
 	return ('x');
 }

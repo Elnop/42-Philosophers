@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*   mini_liblp(1).c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lperroti <lperroti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/09 09:27:20 by lperroti          #+#    #+#             */
-/*   Updated: 2023/01/07 05:03:39 by lperroti         ###   ########.fr       */
+/*   Created: 2023/07/21 03:18:42 by lperroti          #+#    #+#             */
+/*   Updated: 2023/07/21 03:18:44 by lperroti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	lp_atoi(const char *nptr)
+long long	lp_atol(const char *nptr)
 {
-	int	num;
-	int	sign;
+	long long	num;
+	long long	sign;
 
 	num = 0;
 	while ((*nptr >= '\t' && *nptr <= '\r') || *nptr == ' ')

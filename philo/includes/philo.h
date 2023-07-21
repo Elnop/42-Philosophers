@@ -6,15 +6,21 @@
 /*   By: lperroti <lperroti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 03:37:44 by lperroti          #+#    #+#             */
-/*   Updated: 2023/07/20 00:53:38 by lperroti         ###   ########.fr       */
+/*   Updated: 2023/07/21 04:53:20 by lperroti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_H
 # define PHILO_H
 
-# include "../libs/liblp_c/liblp.h"
 # include <pthread.h>
+# include <stdbool.h>
+# include <pthread.h>
+# include <stdlib.h>
+# include <stdio.h>
+# include <stddef.h>
+# include <sys/time.h>
+# include <unistd.h>
 
 # define PHILO_WAIT_USLEEP 120
 
@@ -52,11 +58,16 @@ typedef struct s_philo {
 	t_app				*app;
 }	t_philo;
 
-bool	check_args(int argc, char const *argv[]);
-bool	init_app(t_app *app, int argc, char const *argv[]);
-void	*philo_routine(void *app);
-void	change_status(t_philo *philo, enum e_philo_status status);
-bool	is_finish(t_app	*app);
-void	philo_wait(t_philo	*philo, long long ms);
+bool		check_args(int argc, char const *argv[]);
+bool		init_app(t_app *app, int argc, char const *argv[]);
+void		*philo_routine(void *app);
+void		change_status(t_philo *philo, enum e_philo_status status);
+bool		is_finish(t_app	*app);
+bool		check_all_philo_eat_enough(t_philo *philo);
+char		*lp_strchr(char const *s, int c);
+char		*lp_strmapi(char const *s, char (*f)(unsigned int, char));
+long long	lp_get_timestamp(void);
+long long	lp_atol(const char *nptr);
+void		philo_wait(t_philo	*philo, long long ms);
 
 #endif
