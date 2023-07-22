@@ -26,7 +26,6 @@ bool	init_philos_and_forks(t_app *app)
 		app->philo_list[i].app = app;
 		app->philo_list[i].meal_count = 0;
 		pthread_mutex_init(&(app->philo_list[i].fork_mutex), NULL);
-		app->philo_list[i].last_meal = lp_get_timestamp();
 		i++;
 	}
 	return (true);
@@ -49,6 +48,5 @@ bool	init_app(t_app *app, int argc, char const *argv[])
 	app->total_satiated = 0;
 	if (!init_philos_and_forks(app))
 		return (false);
-	app->start_timestamp = lp_get_timestamp();
 	return (true);
 }

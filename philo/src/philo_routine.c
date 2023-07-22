@@ -12,7 +12,7 @@
 
 #include "../includes/philo.h"
 
-void	take_forks_and_eat(t_philo *philo)
+bool	take_forks_and_eat(t_philo *philo)
 {
 	pthread_mutex_t	*fork_left;
 	pthread_mutex_t	*fork_right;
@@ -24,29 +24,23 @@ void	take_forks_and_eat(t_philo *philo)
 	else
 		fork_right = &philo->app->philo_list[0].fork_mutex;
 	pthread_mutex_lock(fork_left);
-	change_status(philo, TAKING_A_FORK);
+	if (!change_status(philo, TAKING_A_FORK))
+	{
+		pthread_mutex_unlock(fork_left);
+		return (false);
+	}
 	pthread_mutex_lock(fork_right);
-	change_status(philo, TAKING_A_FORK);
-	change_status(philo, EATING);
+	if (!change_status(philo, TAKING_A_FORK) || !change_status(philo, EATING))
+	{
+		pthread_mutex_unlock(fork_left);
+		pthread_mutex_unlock(fork_right);
+		return (false);
+	}
 	philo->meal_count += 1;
 	philo_wait(philo, philo->app->time_to_eat);
 	pthread_mutex_unlock(fork_left);
 	pthread_mutex_unlock(fork_right);
-}
-
-bool	am_i_starving(t_philo *philo)
-{
-	if (is_finish(philo->app))
-		return (true);
-	if (lp_get_timestamp() - philo->last_meal > philo->app->time_to_die)
-	{
-		change_status(philo, DIED);
-		pthread_mutex_lock(&(philo->app->is_finish_mutex));
-		philo->app->is_finish = true;
-		pthread_mutex_unlock(&(philo->app->is_finish_mutex));
-		return (true);
-	}
-	return (false);
+	return (true);
 }
 
 bool	check_eat_enough(t_philo *philo)
@@ -73,18 +67,21 @@ void	*philo_routine(void *props)
 	philo = (t_philo *)props;
 	pthread_mutex_lock(&philo->app->start_mutex);
 	pthread_mutex_unlock(&philo->app->start_mutex);
+	philo->last_meal = lp_get_timestamp();
+	philo->start_timestamp = lp_get_timestamp();
 	if (!(philo->my_index % 2))
 		philo_wait(philo, philo->app->time_to_eat);
 	while (true)
 	{
-		if (is_finish(philo->app) || am_i_starving(philo))
+		if (!take_forks_and_eat(philo))
 			return (NULL);
-		take_forks_and_eat(philo);
 		if (check_eat_enough(philo))
 			return (NULL);
-		change_status(philo, SLEEPING);
+		if (!change_status(philo, SLEEPING))
+			return (NULL);
 		philo_wait(philo, philo->app->time_to_sleep);
-		change_status(philo, THINKING);
+		if (!change_status(philo, THINKING))
+			return (NULL);
 		if (philo->app->time_to_eat > philo->app->time_to_sleep)
 			philo_wait(philo,
 				(philo->app->time_to_eat - philo->app->time_to_sleep) * 1);

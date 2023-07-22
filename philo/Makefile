@@ -30,10 +30,10 @@ $(NAME): $(OBJS_DIR) $(OBJS)
 	$(CC) $(OBJS) $(LIBLP) -o $(NAME)
 
 $(OBJS_DIR):
-	@mkdir -p $(OBJS_DIR)
+	mkdir -p $(OBJS_DIR)
 
 $(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c $(INCLUDES)
-	@$(CC) $(CFLAGS) -c $< -o $@ -I $(INCLUDES_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -I $(INCLUDES_DIR)
 
 all: $(NAME)
 

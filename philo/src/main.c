@@ -66,9 +66,14 @@ int	main(int argc, char const *argv[])
 		printf("[number_of_times_each_philosopher_must_eat]\n");
 		return (0);
 	}
-	if (!init_app(&app, argc, argv) || !app.philo_count || app.philo_count < 2)
+	if (!init_app(&app, argc, argv) || app.philo_count < 2)
 	{
-		printf("0 1 died\n");
+		printf("0 1 died\nERROR: philo 1 died in deep loneliness :/\n");
+		return (0);
+	}
+	if (app.time_to_die < 60 || app.time_to_eat < 60 || app.time_to_sleep < 60)
+	{
+		printf("ERROR: no simulation with times below to 60ms\n");
 		return (0);
 	}
 	start_philos(&app);
