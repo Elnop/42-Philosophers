@@ -34,7 +34,7 @@ enum e_philo_status {
 
 typedef struct s_app {
 	pthread_mutex_t	start_mutex;
-	long			philo_count;
+	int				philo_count;
 	struct s_philo	*philo_list;
 	long			time_to_die;
 	long			time_to_eat;
@@ -68,5 +68,8 @@ char		*lp_strmapi(char const *s, char (*f)(unsigned int, char));
 long long	lp_get_timestamp(void);
 long long	lp_atol(const char *nptr);
 void		philo_wait(t_philo	*philo, long long ms);
+bool		philo_is_starving(t_philo *philo);
+bool		is_finish(t_philo *philo);
+void    	check_death_while(t_app *app);
 
 #endif

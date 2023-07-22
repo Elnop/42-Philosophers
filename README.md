@@ -4,19 +4,17 @@ Dining philosophers problem simulation for Linux
 ## Download & Build
 
 ```
-git clone git@github.com:ImHoppy/Philosophers.git
+git clone git@github.com:Elnop/42-Philosophers.git
 cd 42-Philosopher/philo
 make
 ```
-## Help
+## Run
 
 ```
 ./philo number_of_philosophers* time_to_die* time_to_eat* time_to_sleep* meal_count_required
 ```
 
-\*=required
-
-no simulation with times below to 60ms
+*\*=required*
 
 ## Testing tools
 
@@ -33,7 +31,7 @@ You can directly CTRL+V in visualizer
 ./philo 2 400 200 100
 ```
 
-philo 2 dies at 400ms because time_to_die = 400
+philo dies at 400ms because time_to_die = 400
 ```
 0 2 has taken a fork
 0 2 has taken a fork
@@ -92,7 +90,53 @@ philo 2 dies at 400ms because time_to_die = 400
 ### Odd philo count
 
 ```
-./philo 7 620 300 200 10
+./philo 7 620 300 200
 ```
-**TODO** debug death when philo wait fork
-add while check in main thread
+one philo dies at time_to_die
+```
+0 2 has taken a fork
+0 2 has taken a fork
+0 2 is eating
+0 4 has taken a fork
+0 4 has taken a fork
+0 4 is eating
+0 6 has taken a fork
+0 6 has taken a fork
+0 6 is eating
+300 6 is sleeping
+300 2 is sleeping
+300 1 has taken a fork
+300 4 is sleeping
+300 5 has taken a fork
+300 1 has taken a fork
+300 1 is eating
+300 5 has taken a fork
+300 5 is eating
+300 3 has taken a fork
+300 3 has taken a fork
+300 3 is eating
+300 7 has taken a fork
+500 6 is thinking
+500 2 is thinking
+500 4 is thinking
+600 5 is sleeping
+600 1 is sleeping
+600 3 is sleeping
+600 7 has taken a fork
+600 7 is eating
+600 4 has taken a fork
+600 4 has taken a fork
+600 4 is eating
+600 6 has taken a fork
+600 2 has taken a fork
+600 2 has taken a fork
+600 2 is eating
+620 6 died
+```
+
+![](./assets/images/screen2.png)
+
+```
+./philo 5 310 100 200 5
+```
+![](./assets/images/screen3.png)

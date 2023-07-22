@@ -12,37 +12,13 @@
 
 #include "../includes/philo.h"
 
-static bool	philo_is_starving(t_philo *philo)
-{
-	if (lp_get_timestamp() - philo->last_meal >= philo->app->time_to_die)
-	{
-		change_status(philo, DIED);
-		pthread_mutex_lock(&(philo->app->is_finish_mutex));
-		philo->app->is_finish = true;
-		pthread_mutex_unlock(&(philo->app->is_finish_mutex));
-		return (true);
-	}
-	return (false);
-}
-
-static bool	is_finish(t_philo *philo)
-{
-	bool	out;
-	if (philo_is_starving(philo))
-		return (true);
-	pthread_mutex_lock(&(philo->app->is_finish_mutex));
-	out = philo->app->is_finish;
-	pthread_mutex_unlock(&(philo->app->is_finish_mutex));
-	return (out);
-}
-
 void	philo_wait(t_philo	*philo, long long ms)
 {
 	long long const	target = lp_get_timestamp() + ms;
 
 	while (lp_get_timestamp() < target)
 	{
-		if (is_finish(philo))
+		if ( is_finish(philo) || philo_is_starving(philo))
 			return ;
 		usleep(PHILO_WAIT_USLEEP);
 	}
@@ -50,10 +26,10 @@ void	philo_wait(t_philo	*philo, long long ms)
 
 static bool	print_status(t_philo *philo)
 {
-	if (philo->status != DIED && is_finish(philo))
+	if (philo->status != DIED && (is_finish(philo) || philo_is_starving(philo)))
 		return (false);
 	pthread_mutex_lock(&philo->app->write_mutex);
-	if (philo->status != DIED && is_finish(philo))
+	if (philo->status != DIED && (is_finish(philo) || philo_is_starving(philo)))
 	{
 		pthread_mutex_unlock(&philo->app->write_mutex);
 		return (false);

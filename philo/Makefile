@@ -10,7 +10,8 @@ FILES = main \
 		philo_routine \
 		utils \
 		mini_liblp \
-		mini_liblp1
+		mini_liblp1 \
+		check_death_while \
 
 SRCS_DIR = src
 
