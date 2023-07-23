@@ -29,18 +29,14 @@ void    check_death_while(t_app *app)
 {
 	int		i;
 
-	if (!(app->philo_count % 2) && app->time_to_die > app->time_to_eat + app->time_to_sleep)
-		return ;
-	pthread_mutex_lock(&app->start_mutex);
-	pthread_mutex_unlock(&app->start_mutex);
-	usleep(100 * app->philo_count);
+	usleep(10000);
     while (true)
     {
 		usleep(1000);
 		i = 0;
         while (i < app->philo_count)
 		{
-			if (is_finish(app->philo_list + i) || philo_is_starving(app->philo_list + i))
+			if (philo_is_starving(app->philo_list + i))
 				return ;
 			i++;
 		}

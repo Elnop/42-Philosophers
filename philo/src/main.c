@@ -26,6 +26,7 @@ static void	start_philos(t_app *app)
 			app->philo_list + i);
 		i++;
 	}
+	app->start_timestamp = lp_get_timestamp();
 	pthread_mutex_unlock(&app->start_mutex);
 }
 
@@ -77,7 +78,7 @@ int	main(int argc, char const *argv[])
 		return (0);
 	}
 	start_philos(&app);
-	//check_death_while(&app);
+	check_death_while(&app);
 	join_philos(&app);
 	destroy_all(&app);
 	return (0);

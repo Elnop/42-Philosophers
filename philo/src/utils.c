@@ -18,7 +18,7 @@ void	philo_wait(t_philo	*philo, long long ms)
 
 	while (lp_get_timestamp() < target)
 	{
-		if (is_finish(philo) || philo_is_starving(philo))
+		if (philo_is_starving(philo))
 			return ;
 		usleep(PHILO_WAIT_USLEEP);
 	}
@@ -26,54 +26,54 @@ void	philo_wait(t_philo	*philo, long long ms)
 
 static bool	print_status(t_philo *philo)
 {
-	if (philo->status != DIED && (is_finish(philo) || philo_is_starving(philo)))
-		return (false);
-	pthread_mutex_lock(&philo->app->write_mutex);
-	if (philo->status != DIED && (is_finish(philo) || philo_is_starving(philo)))
-	{
-		pthread_mutex_unlock(&philo->app->write_mutex);
-		return (false);
-	}
 	if (philo->status == TAKING_A_FORK)
 		printf("%lld %d has taken a fork\n",
-			lp_get_timestamp() - philo->start_timestamp,
+			lp_get_timestamp() - philo->app->start_timestamp,
 			philo->my_index + 1);
 	if (philo->status == EATING)
 		printf("%lld %d is eating\n",
-			lp_get_timestamp() - philo->start_timestamp,
+			lp_get_timestamp() - philo->app->start_timestamp,
 			philo->my_index + 1);
 	if (philo->status == SLEEPING)
 		printf("%lld %d is sleeping\n",
-			lp_get_timestamp() - philo->start_timestamp,
+			lp_get_timestamp() - philo->app->start_timestamp,
 			philo->my_index + 1);
 	if (philo->status == THINKING)
 		printf("%lld %d is thinking\n",
-			lp_get_timestamp() - philo->start_timestamp,
+			lp_get_timestamp() - philo->app->start_timestamp,
 			philo->my_index + 1);
 	if (philo->status == DIED)
 		printf("%lld %d died\n",
-			lp_get_timestamp() - philo->start_timestamp,
+			lp_get_timestamp() - philo->app->start_timestamp,
 			philo->my_index + 1);
-	pthread_mutex_unlock(&philo->app->write_mutex);
 	return (true);
 }
 
 bool	change_status(t_philo *philo, enum e_philo_status status)
 {
+	if (is_finish(philo))
+		return (false);
+	pthread_mutex_lock(&philo->app->write_mutex);
+	if (is_finish(philo))
+	{
+		pthread_mutex_unlock(&philo->app->write_mutex);
+		return (false);
+	}
 	philo->status = status;
+	if (!print_status(philo))
+		return (false);
+	if (status == DIED)
+	{
+		pthread_mutex_lock(&(philo->app->is_finish_mutex));
+		philo->app->is_finish = true;
+		pthread_mutex_unlock(&(philo->app->is_finish_mutex));
+	}
+	pthread_mutex_unlock(&philo->app->write_mutex);
 	if (status == EATING)
 	{
 		pthread_mutex_lock(&philo->last_meal_mutex);
 		philo->last_meal = lp_get_timestamp();
 		pthread_mutex_unlock(&philo->last_meal_mutex);
-	}
-	if (!print_status(philo))
-		return (false);
-	if (status == DIED)
-	{
-		pthread_mutex_lock(&philo->app->is_finish_mutex);
-		philo->app->is_finish = true;
-		pthread_mutex_unlock(&philo->app->is_finish_mutex);
 	}
 	return (true);
 }

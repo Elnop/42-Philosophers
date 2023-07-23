@@ -34,6 +34,7 @@ enum e_philo_status {
 
 typedef struct s_app {
 	pthread_mutex_t	start_mutex;
+	long long		start_timestamp;
 	int				philo_count;
 	struct s_philo	*philo_list;
 	long			time_to_die;
@@ -51,7 +52,6 @@ typedef struct s_philo {
 	int					my_index;
 	pthread_t			thread;
 	pthread_mutex_t		fork_mutex;
-	long long			start_timestamp;
 	long long			last_meal;
 	pthread_mutex_t		last_meal_mutex;
 	long long			meal_count;

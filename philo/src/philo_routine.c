@@ -14,32 +14,29 @@
 
 bool	take_forks_and_eat(t_philo *philo)
 {
-	pthread_mutex_t	*fork_left;
-	pthread_mutex_t	*fork_right;
-
-	fork_left = &philo->fork_mutex;
+	pthread_mutex_t	*next_fork;
 
 	if (philo->my_index + 1 < philo->app->philo_count)
-		fork_right = &philo->app->philo_list[philo->my_index + 1].fork_mutex;
+		next_fork = &philo->app->philo_list[philo->my_index + 1].fork_mutex;
 	else
-		fork_right = &philo->app->philo_list[0].fork_mutex;
-	pthread_mutex_lock(fork_left);
+		next_fork = &philo->app->philo_list[0].fork_mutex;
+	pthread_mutex_lock(&philo->fork_mutex);
 	if (!change_status(philo, TAKING_A_FORK))
 	{
-		pthread_mutex_unlock(fork_left);
+		pthread_mutex_unlock(&philo->fork_mutex);
 		return (false);
 	}
-	pthread_mutex_lock(fork_right);
+	pthread_mutex_lock(next_fork);
 	if (!change_status(philo, TAKING_A_FORK) || !change_status(philo, EATING))
 	{
-		pthread_mutex_unlock(fork_right);
-		pthread_mutex_unlock(fork_left);
+		pthread_mutex_unlock(&philo->fork_mutex);
+		pthread_mutex_unlock(next_fork);
 		return (false);
 	}
 	philo->meal_count += 1;
 	philo_wait(philo, philo->app->time_to_eat);
-	pthread_mutex_unlock(fork_left);
-	pthread_mutex_unlock(fork_right);
+	pthread_mutex_unlock(&philo->fork_mutex);
+	pthread_mutex_unlock(next_fork);
 	return (true);
 }
 
@@ -70,7 +67,6 @@ void	*philo_routine(void *props)
 	pthread_mutex_lock(&philo->last_meal_mutex);
 	philo->last_meal = lp_get_timestamp();
 	pthread_mutex_unlock(&philo->last_meal_mutex);
-	philo->start_timestamp = lp_get_timestamp();
 	if (!(philo->my_index % 2))
 		philo_wait(philo, philo->app->time_to_eat);
 	while (true)
