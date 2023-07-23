@@ -53,6 +53,7 @@ typedef struct s_philo {
 	pthread_mutex_t		fork_mutex;
 	long long			start_timestamp;
 	long long			last_meal;
+	pthread_mutex_t		last_meal_mutex;
 	long long			meal_count;
 	enum e_philo_status	status;
 	t_app				*app;

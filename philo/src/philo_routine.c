@@ -32,8 +32,8 @@ bool	take_forks_and_eat(t_philo *philo)
 	pthread_mutex_lock(fork_right);
 	if (!change_status(philo, TAKING_A_FORK) || !change_status(philo, EATING))
 	{
-		pthread_mutex_unlock(fork_left);
 		pthread_mutex_unlock(fork_right);
+		pthread_mutex_unlock(fork_left);
 		return (false);
 	}
 	philo->meal_count += 1;
@@ -67,7 +67,9 @@ void	*philo_routine(void *props)
 	philo = (t_philo *)props;
 	pthread_mutex_lock(&philo->app->start_mutex);
 	pthread_mutex_unlock(&philo->app->start_mutex);
+	pthread_mutex_lock(&philo->last_meal_mutex);
 	philo->last_meal = lp_get_timestamp();
+	pthread_mutex_unlock(&philo->last_meal_mutex);
 	philo->start_timestamp = lp_get_timestamp();
 	if (!(philo->my_index % 2))
 		philo_wait(philo, philo->app->time_to_eat);

@@ -77,7 +77,7 @@ int	main(int argc, char const *argv[])
 		return (0);
 	}
 	start_philos(&app);
-	check_death_while(&app);
+	//check_death_while(&app);
 	join_philos(&app);
 	destroy_all(&app);
 	return (0);

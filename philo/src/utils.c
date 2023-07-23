@@ -18,7 +18,7 @@ void	philo_wait(t_philo	*philo, long long ms)
 
 	while (lp_get_timestamp() < target)
 	{
-		if ( is_finish(philo) || philo_is_starving(philo))
+		if (is_finish(philo) || philo_is_starving(philo))
 			return ;
 		usleep(PHILO_WAIT_USLEEP);
 	}
@@ -61,10 +61,20 @@ static bool	print_status(t_philo *philo)
 bool	change_status(t_philo *philo, enum e_philo_status status)
 {
 	philo->status = status;
+	if (status == EATING)
+	{
+		pthread_mutex_lock(&philo->last_meal_mutex);
+		philo->last_meal = lp_get_timestamp();
+		pthread_mutex_unlock(&philo->last_meal_mutex);
+	}
 	if (!print_status(philo))
 		return (false);
-	if (status == EATING)
-		philo->last_meal = lp_get_timestamp();
+	if (status == DIED)
+	{
+		pthread_mutex_lock(&philo->app->is_finish_mutex);
+		philo->app->is_finish = true;
+		pthread_mutex_unlock(&philo->app->is_finish_mutex);
+	}
 	return (true);
 }
 

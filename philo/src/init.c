@@ -26,6 +26,7 @@ bool	init_philos_and_forks(t_app *app)
 		app->philo_list[i].app = app;
 		app->philo_list[i].meal_count = 0;
 		pthread_mutex_init(&(app->philo_list[i].fork_mutex), NULL);
+		pthread_mutex_init(&app->philo_list[i].last_meal_mutex, NULL);
 		i++;
 	}
 	return (true);
