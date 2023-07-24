@@ -12,7 +12,7 @@
 
 #include "../includes/philo.h"
 
-char	check_args_handler(unsigned int i, char c)
+static char	check_args_handler(unsigned int i, char c)
 {
 	(void)i;
 	if (c >= '0' && c <= '9')

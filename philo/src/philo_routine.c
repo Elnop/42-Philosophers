@@ -12,7 +12,7 @@
 
 #include "../includes/philo.h"
 
-bool	take_forks_and_eat(t_philo *philo)
+static bool	take_forks_and_eat(t_philo *philo)
 {
 	pthread_mutex_t	*next_fork;
 
@@ -40,7 +40,7 @@ bool	take_forks_and_eat(t_philo *philo)
 	return (true);
 }
 
-bool	check_eat_enough(t_philo *philo)
+static bool	check_eat_enough(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->app->total_satiated_mutex);
 	if (philo->meal_count == philo->app->max_meal)
@@ -64,9 +64,7 @@ void	*philo_routine(void *props)
 	philo = (t_philo *)props;
 	pthread_mutex_lock(&philo->app->start_mutex);
 	pthread_mutex_unlock(&philo->app->start_mutex);
-	pthread_mutex_lock(&philo->last_meal_mutex);
-	philo->last_meal = lp_get_timestamp();
-	pthread_mutex_unlock(&philo->last_meal_mutex);
+	set_last_meal(philo, lp_get_timestamp());
 	if (!(philo->my_index % 2))
 		philo_wait(philo, philo->app->time_to_eat);
 	while (true)

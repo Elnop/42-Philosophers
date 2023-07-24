@@ -30,23 +30,6 @@ static void	start_philos(t_app *app)
 	pthread_mutex_unlock(&app->start_mutex);
 }
 
-static void	destroy_forks_mutex(t_app *app)
-{
-	int	i;
-
-	i = 0;
-	while (i < app->philo_count)
-		pthread_mutex_destroy(&app->philo_list[i++].fork_mutex);
-}
-
-static void	destroy_all(t_app *app)
-{
-	destroy_forks_mutex(app);
-	free(app->philo_list);
-	pthread_mutex_destroy(&app->is_finish_mutex);
-	pthread_mutex_destroy(&app->write_mutex);
-}
-
 static void	join_philos(t_app *app)
 {
 	int	i;
@@ -72,14 +55,14 @@ int	main(int argc, char const *argv[])
 		printf("0 1 died\nERROR: philo 1 died in deep loneliness :/\n");
 		return (0);
 	}
-	if (app.time_to_die < 60 || app.time_to_eat < 60 || app.time_to_sleep < 60)
+	if (app.time_to_die < MS_ARGS_MIN || app.time_to_eat < MS_ARGS_MIN || app.time_to_sleep < MS_ARGS_MIN)
 	{
-		printf("ERROR: no simulation with times below to 60ms\n");
+		printf("ERROR: no simulation with times below to %dms\n", MS_ARGS_MIN);
 		return (0);
 	}
 	start_philos(&app);
 	check_death_while(&app);
 	join_philos(&app);
-	destroy_all(&app);
+	destroy_app(&app);
 	return (0);
 }

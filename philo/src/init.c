@@ -42,8 +42,8 @@ bool	init_app(t_app *app, int argc, char const *argv[])
 		app->max_meal = lp_atol(argv[5]);
 	else
 		app->max_meal = -1;
-	pthread_mutex_init(&(app->is_finish_mutex), NULL);
 	app->is_finish = false;
+	pthread_mutex_init(&(app->is_finish_mutex), NULL);
 	pthread_mutex_init(&(app->write_mutex), NULL);
 	pthread_mutex_init(&app->total_satiated_mutex, NULL);
 	app->total_satiated = 0;

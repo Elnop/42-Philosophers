@@ -11,7 +11,9 @@ FILES = main \
 		utils \
 		mini_liblp \
 		mini_liblp1 \
-		check_death_while \
+		check_death \
+		change_status \
+		destroy
 
 SRCS_DIR = src
 

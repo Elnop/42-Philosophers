@@ -1,5 +1,15 @@
 #include "../includes/philo.h"
 
+bool	is_finish(t_philo *philo)
+{
+	bool	out;
+
+	pthread_mutex_lock(&(philo->app->is_finish_mutex));
+	out = philo->app->is_finish;
+	pthread_mutex_unlock(&(philo->app->is_finish_mutex));
+	return (out);
+}
+
 bool	philo_is_starving(t_philo *philo)
 {
 	if (is_finish(philo))
@@ -15,16 +25,6 @@ bool	philo_is_starving(t_philo *philo)
 	return (false);
 }
 
-bool	is_finish(t_philo *philo)
-{
-	bool	out;
-
-	pthread_mutex_lock(&(philo->app->is_finish_mutex));
-	out = philo->app->is_finish;
-	pthread_mutex_unlock(&(philo->app->is_finish_mutex));
-	return (out);
-}
-
 void    check_death_while(t_app *app)
 {
 	int		i;
@@ -32,7 +32,7 @@ void    check_death_while(t_app *app)
 	usleep(10000);
     while (true)
     {
-		usleep(1000);
+		usleep(CHECK_DEATH_USLEEP);
 		i = 0;
         while (i < app->philo_count)
 		{

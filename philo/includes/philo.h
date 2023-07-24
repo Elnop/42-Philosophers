@@ -23,6 +23,8 @@
 # include <unistd.h>
 
 # define PHILO_WAIT_USLEEP 120
+# define CHECK_DEATH_USLEEP 1000
+# define MS_ARGS_MIN 60
 
 enum e_philo_status {
 	TAKING_A_FORK,
@@ -59,18 +61,22 @@ typedef struct s_philo {
 	t_app				*app;
 }	t_philo;
 
-bool		check_args(int argc, char const *argv[]);
-bool		init_app(t_app *app, int argc, char const *argv[]);
 void		*philo_routine(void *app);
 bool		change_status(t_philo *philo, enum e_philo_status status);
-bool		check_all_philo_eat_enough(t_philo *philo);
+bool		check_args(int argc, char const *argv[]);
+bool		init_app(t_app *app, int argc, char const *argv[]);
+void		destroy_app(t_app *app);
+// ====== UTILS =============== //
+void		philo_wait(t_philo	*philo, long long ms);
+void		set_last_meal(t_philo *philo, long long ms);
+// ====== CHECK DEATH ========= //
+bool		is_finish(t_philo *philo);
+bool		philo_is_starving(t_philo *philo);
+void    	check_death_while(t_app *app);
+// ====== LIBLP =============== //
 char		*lp_strchr(char const *s, int c);
 char		*lp_strmapi(char const *s, char (*f)(unsigned int, char));
 long long	lp_get_timestamp(void);
 long long	lp_atol(const char *nptr);
-void		philo_wait(t_philo	*philo, long long ms);
-bool		philo_is_starving(t_philo *philo);
-bool		is_finish(t_philo *philo);
-void    	check_death_while(t_app *app);
 
 #endif
