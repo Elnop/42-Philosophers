@@ -40,43 +40,6 @@ size_t	lp_strlen(const char *s)
 	return (i);
 }
 
-char	*lp_strdup(const char *s)
-{
-	char	*dup;
-	int		i;
-
-	dup = (char *)malloc((lp_strlen((char *)s) + 1) * sizeof(char));
-	if (!dup)
-		return (NULL);
-	i = 0;
-	while (s[i])
-	{
-		dup[i] = s[i];
-		i++;
-	}
-	dup[i] = 0;
-	return (dup);
-}
-
-char	*lp_strmapi(char const *s, char (*f)(unsigned int, char))
-{
-	char			*cpy;
-	unsigned int	i;
-
-	if (!s || !f)
-		return (NULL);
-	cpy = lp_strdup(s);
-	if (!cpy)
-		return (cpy);
-	i = 0;
-	while (cpy[i])
-	{
-		cpy[i] = f(i, cpy[i]);
-		i++;
-	}
-	return (cpy);
-}
-
 long long	lp_get_timestamp(void)
 {
 	struct timeval	t;

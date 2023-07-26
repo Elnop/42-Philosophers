@@ -25,6 +25,7 @@
 # define PHILO_WAIT_USLEEP 120
 # define CHECK_DEATH_USLEEP 1000
 # define MS_ARGS_MIN 60
+# define MAX_PHILOS 200
 
 enum e_philo_status {
 	TAKING_A_FORK,
@@ -34,11 +35,22 @@ enum e_philo_status {
 	DIED
 };
 
+typedef struct s_philo {
+	int					my_index;
+	pthread_t			thread;
+	pthread_mutex_t		fork_mutex;
+	long long			last_meal;
+	pthread_mutex_t		last_meal_mutex;
+	long long			meal_count;
+	enum e_philo_status	status;
+	struct s_app		*app;
+}	t_philo;
+
 typedef struct s_app {
 	pthread_mutex_t	start_mutex;
 	long long		start_timestamp;
 	int				philo_count;
-	struct s_philo	*philo_list;
+	t_philo			philo_list[MAX_PHILOS];
 	long			time_to_die;
 	long			time_to_eat;
 	long			time_to_sleep;
@@ -49,17 +61,6 @@ typedef struct s_app {
 	bool			is_finish;
 	pthread_mutex_t	write_mutex;
 }	t_app;
-
-typedef struct s_philo {
-	int					my_index;
-	pthread_t			thread;
-	pthread_mutex_t		fork_mutex;
-	long long			last_meal;
-	pthread_mutex_t		last_meal_mutex;
-	long long			meal_count;
-	enum e_philo_status	status;
-	t_app				*app;
-}	t_philo;
 
 void		*philo_routine(void *app);
 bool		change_status(t_philo *philo, enum e_philo_status status);

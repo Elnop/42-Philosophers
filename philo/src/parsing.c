@@ -12,28 +12,24 @@
 
 #include "../includes/philo.h"
 
-static char	check_args_handler(unsigned int i, char c)
-{
-	(void)i;
-	if (c >= '0' && c <= '9')
-		return (c);
-	return ('x');
-}
-
 bool	check_args(int argc, char const *argv[])
 {
-	char	*tmp;
-	int		i;
+	int	i;
+	int	j;
 
 	if (argc != 5 && argc != 6)
 		return (false);
 	i = 1;
 	while (i < argc)
 	{
-		tmp = lp_strmapi(argv[i++], check_args_handler);
-		if (lp_strchr(tmp, 'x'))
-			return (free(tmp), false);
-		free(tmp);
+		j = 0;
+		while (argv[i][j])
+		{
+			if (argv[i][j] < '0' || argv[i][j] > '9')
+				return (false);
+			j++;
+		}
+		i++;
 	}
 	return (true);
 }

@@ -16,9 +16,6 @@ bool	init_philos_and_forks(t_app *app)
 {
 	long	i;
 
-	app->philo_list = (t_philo *)malloc(app->philo_count * sizeof(t_philo));
-	if (!app->philo_list)
-		return (false);
 	i = 0;
 	while (i < app->philo_count)
 	{
@@ -35,6 +32,8 @@ bool	init_philos_and_forks(t_app *app)
 bool	init_app(t_app *app, int argc, char const *argv[])
 {
 	app->philo_count = lp_atol(argv[1]);
+	if (app->philo_count > MAX_PHILOS)
+		return (false);
 	app->time_to_die = lp_atol(argv[2]);
 	app->time_to_eat = lp_atol(argv[3]);
 	app->time_to_sleep = lp_atol(argv[4]);
