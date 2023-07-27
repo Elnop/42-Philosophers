@@ -1,5 +1,5 @@
 # PHILOSOPHER
-Dining philosophers problem simulation for Linux
+[Dining philosophers problem](https://en.wikipedia.org/wiki/Dining_philosophers_problem) simulation for Linux
 
 ## Download & Build
 
