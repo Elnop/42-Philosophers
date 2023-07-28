@@ -6,7 +6,7 @@
 /*   By: lperroti <lperroti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 23:58:41 by lperroti          #+#    #+#             */
-/*   Updated: 2023/07/19 23:52:12 by lperroti         ###   ########.fr       */
+/*   Updated: 2023/07/28 02:23:39 by lperroti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	philo_wait(t_philo	*philo, long long ms)
 
 	while (lp_get_timestamp() < target)
 	{
-		if (philo_is_starving(philo))
+		if (is_finish(philo))
 			return ;
 		usleep(PHILO_WAIT_USLEEP);
 	}
