@@ -6,7 +6,7 @@
 /*   By: lperroti <lperroti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 03:37:01 by lperroti          #+#    #+#             */
-/*   Updated: 2023/07/21 03:02:12 by lperroti         ###   ########.fr       */
+/*   Updated: 2023/07/28 02:09:53 by lperroti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,19 +43,20 @@ int	main(int argc, char const *argv[])
 {
 	t_app	app;
 
-	if (!check_args(argc, argv))
+	if (!check_args(argc, argv) || !init_app(&app, argc, argv))
 	{
-		printf("Philosophers\n./philo number_of_philosophers ");
-		printf("time_to_die time_to_eat time_to_sleep ");
-		printf("[number_of_times_each_philosopher_must_eat]\n");
+		printf("Philosophers\n./philo number_of_philosophers" \
+			"time_to_die time_to_eat time_to_sleep" \
+			"[number_of_times_each_philosopher_must_eat]\n");
 		return (0);
 	}
-	if (!init_app(&app, argc, argv) || app.philo_count < 2)
+	if (app.philo_count == 1)
 	{
 		printf("0 1 died\nERROR: philo 1 died in deep loneliness :/\n");
 		return (0);
 	}
-	if (app.time_to_die < MS_ARGS_MIN || app.time_to_eat < MS_ARGS_MIN || app.time_to_sleep < MS_ARGS_MIN)
+	if (app.time_to_die < MS_ARGS_MIN || app.time_to_eat < MS_ARGS_MIN
+		|| app.time_to_sleep < MS_ARGS_MIN)
 	{
 		printf("ERROR: no simulation with times below to %dms\n", MS_ARGS_MIN);
 		return (0);
