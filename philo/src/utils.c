@@ -6,7 +6,7 @@
 /*   By: lperroti <lperroti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 23:58:41 by lperroti          #+#    #+#             */
-/*   Updated: 2023/07/28 02:23:39 by lperroti         ###   ########.fr       */
+/*   Updated: 2023/07/31 09:09:25 by lperroti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,4 +29,26 @@ void	set_last_meal(t_philo *philo, long long ms)
 	pthread_mutex_lock(&philo->last_meal_mutex);
 	philo->last_meal = ms;
 	pthread_mutex_unlock(&philo->last_meal_mutex);
+}
+
+static void	swap_forks(pthread_mutex_t **left_fork,
+				pthread_mutex_t **right_fork)
+{
+	pthread_mutex_t	*tmp;
+
+	tmp = *left_fork;
+	*left_fork = *right_fork;
+	*right_fork = tmp;
+}
+
+void	set_forks(t_philo *philo,
+			pthread_mutex_t **left_fork, pthread_mutex_t **right_fork)
+{
+	*left_fork = &philo->fork_mutex;
+	if (philo->my_index + 1 < philo->app->philo_count)
+		*right_fork = &philo->app->philo_list[philo->my_index + 1].fork_mutex;
+	else
+		*right_fork = &philo->app->philo_list[0].fork_mutex;
+	if (!(philo->my_index % 2))
+		swap_forks(left_fork, right_fork);
 }

@@ -38,6 +38,9 @@ $(OBJS_DIR):
 $(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c $(INCLUDES)
 	$(CC) $(CFLAGS) -c $< -o $@ -I $(INCLUDES_DIR)
 
+echo:
+	@echo ${ECHO}
+
 all: $(NAME)
 
 clean:

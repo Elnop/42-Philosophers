@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   destroy.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lperroti <lperroti@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/07/31 08:25:53 by lperroti          #+#    #+#             */
+/*   Updated: 2023/07/31 08:25:54 by lperroti         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/philo.h"
 
 static void	destroy_philos_mutex(t_app *app)
@@ -6,11 +18,11 @@ static void	destroy_philos_mutex(t_app *app)
 
 	i = 0;
 	while (i < app->philo_count)
-    {
+	{
 		pthread_mutex_destroy(&app->philo_list[i].fork_mutex);
 		pthread_mutex_destroy(&app->philo_list[i].last_meal_mutex);
 		i++;
-    }
+	}
 }
 
 void	destroy_app(t_app *app)

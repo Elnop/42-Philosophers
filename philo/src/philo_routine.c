@@ -6,7 +6,7 @@
 /*   By: lperroti <lperroti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 20:53:12 by lperroti          #+#    #+#             */
-/*   Updated: 2023/07/21 05:11:56 by lperroti         ###   ########.fr       */
+/*   Updated: 2023/07/31 09:09:00 by lperroti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,29 +14,27 @@
 
 static bool	take_forks_and_eat(t_philo *philo)
 {
-	pthread_mutex_t	*next_fork;
+	pthread_mutex_t	*left_fork;
+	pthread_mutex_t	*right_fork;
 
-	if (philo->my_index + 1 < philo->app->philo_count)
-		next_fork = &philo->app->philo_list[philo->my_index + 1].fork_mutex;
-	else
-		next_fork = &philo->app->philo_list[0].fork_mutex;
-	pthread_mutex_lock(&philo->fork_mutex);
+	set_forks(philo, &left_fork, &right_fork);
+	pthread_mutex_lock(left_fork);
 	if (!change_status(philo, TAKING_A_FORK))
 	{
-		pthread_mutex_unlock(&philo->fork_mutex);
+		pthread_mutex_unlock(left_fork);
 		return (false);
 	}
-	pthread_mutex_lock(next_fork);
+	pthread_mutex_lock(right_fork);
 	if (!change_status(philo, TAKING_A_FORK) || !change_status(philo, EATING))
 	{
-		pthread_mutex_unlock(&philo->fork_mutex);
-		pthread_mutex_unlock(next_fork);
+		pthread_mutex_unlock(left_fork);
+		pthread_mutex_unlock(right_fork);
 		return (false);
 	}
 	philo->meal_count += 1;
 	philo_wait(philo, philo->app->time_to_eat);
-	pthread_mutex_unlock(&philo->fork_mutex);
-	pthread_mutex_unlock(next_fork);
+	pthread_mutex_unlock(left_fork);
+	pthread_mutex_unlock(right_fork);
 	return (true);
 }
 
@@ -81,7 +79,6 @@ void	*philo_routine(void *props)
 		if (philo->app->time_to_eat > philo->app->time_to_sleep)
 			philo_wait(philo,
 				(philo->app->time_to_eat - philo->app->time_to_sleep) * 1);
-
 	}
 	return (NULL);
 }

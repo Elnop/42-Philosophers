@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   change_status.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lperroti <lperroti@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/07/31 07:56:03 by lperroti          #+#    #+#             */
+/*   Updated: 2023/07/31 07:56:05 by lperroti         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/philo.h"
 
 static bool	print_status(t_philo *philo)
@@ -29,6 +41,8 @@ bool	change_status(t_philo *philo, enum e_philo_status status)
 {
 	if (is_finish(philo))
 		return (false);
+	if (status == EATING)
+		set_last_meal(philo, lp_get_timestamp());
 	pthread_mutex_lock(&philo->app->write_mutex);
 	if (is_finish(philo))
 	{
@@ -45,7 +59,5 @@ bool	change_status(t_philo *philo, enum e_philo_status status)
 		pthread_mutex_unlock(&(philo->app->is_finish_mutex));
 	}
 	pthread_mutex_unlock(&philo->app->write_mutex);
-	if (status == EATING)
-		set_last_meal(philo, lp_get_timestamp());
 	return (true);
 }

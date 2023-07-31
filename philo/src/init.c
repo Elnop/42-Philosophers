@@ -6,7 +6,7 @@
 /*   By: lperroti <lperroti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 19:10:34 by lperroti          #+#    #+#             */
-/*   Updated: 2023/07/28 02:09:43 by lperroti         ###   ########.fr       */
+/*   Updated: 2023/07/31 07:49:00 by lperroti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ static void	init_philos_and_forks(t_app *app)
 		app->philo_list[i].my_index = i;
 		app->philo_list[i].app = app;
 		app->philo_list[i].meal_count = 0;
+		app->philo_list[i].last_meal = 0;
 		pthread_mutex_init(&(app->philo_list[i].fork_mutex), NULL);
 		pthread_mutex_init(&(app->philo_list[i].last_meal_mutex), NULL);
 		i++;
