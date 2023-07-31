@@ -6,7 +6,7 @@
 /*   By: lperroti <lperroti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 19:10:34 by lperroti          #+#    #+#             */
-/*   Updated: 2023/07/31 07:49:00 by lperroti         ###   ########.fr       */
+/*   Updated: 2023/08/01 01:42:44 by lperroti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,8 @@ bool	init_app(t_app *app, int argc, char const *argv[])
 	else
 		app->max_meal = -1;
 	app->is_finish = false;
-	pthread_mutex_init(&(app->is_finish_mutex), NULL);
-	pthread_mutex_init(&(app->write_mutex), NULL);
+	pthread_mutex_init(&app->is_finish_mutex, NULL);
+	pthread_mutex_init(&app->write_mutex, NULL);
 	pthread_mutex_init(&app->total_satiated_mutex, NULL);
 	app->total_satiated = 0;
 	init_philos_and_forks(app);

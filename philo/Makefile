@@ -2,12 +2,12 @@ NAME = philo
 
 CC = clang
 
-CFLAGS = -Wall -Wextra -Werror -g3
+CFLAGS = -Wall -Wextra -Werror #-g3
 
 FILES = main \
 		parsing \
 		init \
-		philo_routine \
+		routine \
 		utils \
 		mini_liblp \
 		mini_liblp1 \

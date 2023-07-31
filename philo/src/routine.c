@@ -6,7 +6,7 @@
 /*   By: lperroti <lperroti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 20:53:12 by lperroti          #+#    #+#             */
-/*   Updated: 2023/07/31 09:09:00 by lperroti         ###   ########.fr       */
+/*   Updated: 2023/08/01 01:35:02 by lperroti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void	*philo_routine(void *props)
 			return (NULL);
 		if (philo->app->time_to_eat > philo->app->time_to_sleep)
 			philo_wait(philo,
-				(philo->app->time_to_eat - philo->app->time_to_sleep) * 1);
+				(philo->app->time_to_eat - philo->app->time_to_sleep));
 	}
 	return (NULL);
 }

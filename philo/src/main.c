@@ -6,7 +6,7 @@
 /*   By: lperroti <lperroti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 03:37:01 by lperroti          #+#    #+#             */
-/*   Updated: 2023/07/28 02:09:53 by lperroti         ###   ########.fr       */
+/*   Updated: 2023/08/01 01:41:46 by lperroti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	main(int argc, char const *argv[])
 	}
 	if (app.philo_count == 1)
 	{
-		printf("0 1 died\nERROR: philo 1 died in deep loneliness :/\n");
+		printf("0 1 has taken a fork\n%ld 1 died\n", app.time_to_die);
 		return (0);
 	}
 	if (app.time_to_die < MS_ARGS_MIN || app.time_to_eat < MS_ARGS_MIN
