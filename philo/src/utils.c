@@ -6,7 +6,7 @@
 /*   By: lperroti <lperroti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 23:58:41 by lperroti          #+#    #+#             */
-/*   Updated: 2023/07/31 09:09:25 by lperroti         ###   ########.fr       */
+/*   Updated: 2023/08/03 22:28:22 by lperroti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,6 @@ void	set_forks(t_philo *philo,
 		*right_fork = &philo->app->philo_list[philo->my_index + 1].fork_mutex;
 	else
 		*right_fork = &philo->app->philo_list[0].fork_mutex;
-	if (!(philo->my_index % 2))
+	if (philo->my_index + 1 == philo->app->philo_count)
 		swap_forks(left_fork, right_fork);
 }
